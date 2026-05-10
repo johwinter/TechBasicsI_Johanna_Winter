@@ -1,0 +1,82 @@
+# Assignment 3 
+
+import turtle
+import random
+
+palette = ["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"]
+
+# SCREEN SETUP
+screen = turtle.Screen()
+screen.bgcolor("#1a1a2e")        # dark background
+screen.title("Generative Art")
+screen.tracer(0)                  # draws instantly
+
+t = turtle.Turtle()
+t.hideturtle()                    # hide the arrow
+t.speed(0)
+t.pensize(2)
+
+# GRID SETTINGS
+# How many rows/columns, and how big each cell is
+
+grid_size = 7       # 7x7 grid
+cell_size = 60      # each cell is 60 pixels wide
+
+# Calculate where to start drawing so the grid is centered on screen
+start_x = -(grid_size * cell_size) // 2
+start_y = (grid_size * cell_size) // 2
+
+# HELPER FUNCTIONS
+# These handle the actual drawing so the loop stays clean
+
+def draw_circle(t, x, y, size, color):
+    t.penup()
+    t.goto(x, y - size)          # turtle draws circles from the bottom
+    t.pendown()
+    t.fillcolor(color)
+    t.begin_fill()
+    t.circle(size)
+    t.end_fill()
+
+def draw_square(t, x, y, size, color):
+    t.penup()
+    t.goto(x, y)
+    t.pendown()
+    t.fillcolor(color)
+    t.begin_fill()
+    for _ in range(4):           # a square has 4 sides
+        t.forward(size)
+        t.right(90)
+    t.end_fill()
+
+# NESTED LOOPS visit every cell in the grid
+for row in range(grid_size):            # outer loop: rows
+    for col in range(grid_size):        # inner loop: columns
+
+        # Calculate the x and y position of this cell
+        x = start_x + col * cell_size
+        y = start_y - row * cell_size
+
+        # Pick a random color from the palette
+        color = random.choice(palette)
+
+        # Pick a random size (so shapes aren't all identical)
+        size = random.randint(10, 25)
+
+        # CONDITIONAL - randomly choose a shape
+        shape = random.choice(["circle", "square"])
+
+        if shape == "circle":
+            draw_circle(t, x + cell_size // 2, y - cell_size // 2, size, color)
+        elif shape == "square":
+            draw_square(t, x + cell_size // 2 - size // 2, y - cell_size // 2 + size // 2, size, color)
+
+# Show the finished drawing and wait for click to close
+screen.update()                  # draw everything at once (because tracer was off)
+screen.exitonclick()             # click the window to close it
+
+# I wanted to build a code that extended what we had done in class and add another
+# layer with the colors. I used Claude AI to guide me through the process and help me write a code
+# I then had to edit it a couple of times as the first code was bugging and the color codes were incomplete.
+# With this approach, I learned to implement what we did in class this week but also add 
+# a new level to it.
