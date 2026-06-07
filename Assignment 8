@@ -1,0 +1,57 @@
+import math
+import pygame
+import sys
+import os
+import random
+
+print("AKTUELLER ORDNER:", os.getcwd())
+print("DATEIEN:", os.listdir())
+
+pygame.init()
+
+flower = pygame.image.load("flower.png")
+flower = pygame.transform.scale(flower, (100, 100))
+
+screen = pygame.display.set_mode((800, 600))
+
+x = 300
+y = 200
+
+class Flower:
+    def __init__(self):
+        self.x = random.randint(0,700)
+        self.y = random.randint(0,500)
+        self.radius = random.randint(100, 500)
+        self.angle = random.uniform(0, 2 * math.pi)
+        self.speed= random.uniform(0.01, 0.05)
+        self.center_x = random.randint(100, 700)
+        self.center_y = random.randint(100, 500)
+    def move(self):
+        self.angle += self.speed
+
+        self.x = self.center_x + math.cos(self.angle) * self.radius
+        self.y = self.center_y + math.sin(self.angle) * self.radius
+
+flowers = []
+for i in range (5):
+    flowers.append(Flower())
+
+
+running = True
+
+while running:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill((255, 255, 255))
+
+    for f in flowers:
+        f.move()
+        screen.blit(flower, (f.x, f.y))
+
+    pygame.display.update()
+
+pygame.quit()
+sys.exit()
